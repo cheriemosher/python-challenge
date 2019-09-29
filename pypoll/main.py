@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import csv
 
 # Establish path to data
 election_data_path = os.path.join('raw_data', 'election_data.csv')
@@ -24,18 +23,20 @@ reorder_candidate = candidates.sort_values(["County"], ascending=False)
 winner = reorder_candidate.iloc[0,0]
 
 # Calculate the percent of the total vote for each candidate
-reorder_candidate["% of Votes"] = (reorder_candidate["County"]/total_votes)*100
+reorder_candidate["%"] = (reorder_candidate["County"]/total_votes)*100
 
 # Rename to 'County' to 'Number of the Votes' (as they were counted in groupby)
 reorder_candidate.rename(columns={"County" : "# of Votes"}, inplace=True)
 
 # Make the 'Candidate' column the index
 final_results = reorder_candidate.set_index("Candidate")
+# Format percent column so it looks nicer
+final_results["%"] = final_results["%"].map("{:.0f}%".format)
 
 print("------------------------------------")
 print("Election Results")
 print("------------------------------------")
-print(f"Total Votes: {str(total_votes)}")
+print(f"Votes: {str(total_votes)}")
 print("------------------------------------")
 print(final_results)
 print("------------------------------------")
