@@ -6,7 +6,6 @@ csvpath = os.path.join("raw_data", "election_data.csv")
 
 # Create a variable for the total number of votes
 total_votes = 0
-candidate_winner = 0
 
 # Create a list for candidate names
 candidate_list = []
@@ -26,6 +25,8 @@ with open(csvpath, newline="") as csvfile:
         total_votes += 1
         candidate_list.append(str(row[2]))
 
+    # Add candidate names to candidate_name (from candidate_list)
+    # Add a vote received by each candidate to the candidate_vote list
     for row[2] in candidate_list:
         if row[2] not in candidate_name:
             candidate_name.append(row[2])
@@ -38,15 +39,19 @@ with open(csvpath, newline="") as csvfile:
         elif row[2] == candidate_name[3]:
             candidate_vote[3] += 1
 
+# Create a dictionary from the list of candidate names (the key) and the number of votes (the value)
 candidate_results = dict(zip(candidate_name, candidate_vote))
 
+# Determine the highest value from the dictionary, and retain the key of the highest value
 winner = max(candidate_results, key=lambda k: candidate_results[k])
 
+# Calculate percent of vote per candidate
 candidate_vote_percent[0] = round(100 * (candidate_vote[0] / total_votes), 2)
 candidate_vote_percent[1] = round(100 * (candidate_vote[1] / total_votes), 2)
 candidate_vote_percent[2] = round(100 * (candidate_vote[2] / total_votes), 2)
 candidate_vote_percent[3] = round(100 * (candidate_vote[3] / total_votes), 2)
 
+# Print results
 print("Election Results")
 print("---------------------------")
 print(f"Total Votes: {total_votes}")
@@ -59,6 +64,7 @@ print("---------------------------")
 print(f"Winner: {winner}")
 print("---------------------------")
 
+# Save results to a text file
 print(f"Election Results", file=open("results/pypoll_nopandas_MOSHER_2019.txt", "w"))
 print(f"--------------------------", file=open("results/pypoll_nopandas_MOSHER_2019.txt", "a"))
 print(f"Total Votes: {total_votes}", file=open("results/pypoll_nopandas_MOSHER_2019.txt", "a"))
